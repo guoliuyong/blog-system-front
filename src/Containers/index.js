@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-07 17:22:10
- * @LastEditTime: 2022-02-21 15:45:52
+ * @LastEditTime: 2022-02-24 17:21:18
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog_backStageSystem\blog_front\src\Containers\index.js
@@ -9,10 +9,11 @@
 import React, { Component } from 'react'
 import { Layout } from 'antd'
 import AppAside from './AppAside'
-import { Redirect, Route, Routes, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import './index.less'
 import { routerConfig } from '../routers/router'
-const { Header, Content } = Layout
+import HeaderJS from './Header'
+const { Content } = Layout;
 export default class DefaultLayout extends Component {
   componentDidMount() {
     console.log('开发')
@@ -24,7 +25,7 @@ export default class DefaultLayout extends Component {
       <Layout>
         <AppAside />
         <Layout>
-          <Header className="header">Header</Header>
+          <HeaderJS className="header"></HeaderJS>
           <Content className="content">
             <Switch>
               {token ? (

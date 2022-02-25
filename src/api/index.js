@@ -1,49 +1,70 @@
+// import { createBrowserHistory } from 'history';
+import { notification } from 'antd'
+import axios from 'axios'
+import { useHistory } from 'react-router-dom';
+// const history = createBrowserHistory();
 
-import axios from "axios";
-// 这里取决于登录的时候将 token 存储在哪里
-const token = localStorage.getItem('token')
-
-const instance = axios.create({
+export default function request(options) {
+    const history = useHistory();
+  function checkStatus(response) {
+    if (response.status >= 200 && response.status < 300) {
+      return response
+    }
+  }
+  const instance = axios.create({
     timeout: 5000,
-    baseURL: 'http://127.0.0.1:5000'
-});
-// axios.baseURL = "http://127.0.0.1:3030"
-// 添加请求拦截器
-instance.interceptors.request.use(
-    config => {
-        // 将 token 添加到请求头
-        token && (config.headers.Authorization = token)
-        return config
-    },
-    error => {
-        return Promise.reject(error)
+    baseURL: 'http://127.0.0.1:5000',
+  })
+  // 处理请求头
+  if (
+    options.method === 'POST' ||
+    options.method === 'PUT' ||
+    options.method === 'DELETE' ||
+    options.method === 'PATCH'
+  ) {
+    options.headers = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json; charset=utf-8',
+      ...options.headers,
     }
-)
-// 添加响应拦截器
-instance.interceptors.response.use(
-    response => {
-        if (response.status === 200) {
-            return Promise.resolve(response.data)
-        } else {
-            return Promise.reject(response.data)
-        }
-    },
-    error => {
-        // 相应错误处理
-        // 比如： token 过期， 无权限访问， 路径不存在， 服务器问题等
-        switch (error.response.status) {
-            case 401:
-                break
-            case 403:
-                break
-            case 404:
-                break
-            case 500:
-                break
-            default:
-                console.log('其他错误信息')
-        }
-        return Promise.reject(error)
+  } else {
+    options.headers = {
+      Accept: 'application/json',
+      ...options.headers,
     }
-)
-export default instance
+  }
+
+  // 为接口携带token
+  const token = localStorage.getItem('token')
+  if (token) {
+    options.headers = {
+      ...options.headers,
+      Authorization: `bearer ${token}`,
+    }
+  }
+  const axiosPromise = instance(options)
+    .then(checkStatus)
+    .then((response) => {
+      if (response.status === 204) {
+        return {}
+      }
+      return response.data
+    })
+    .catch((e) => {
+      if (e.response) {
+        if (e.response.status === 401) {
+          notification.error({
+            message: 'token已过期或失效,请重新登录',
+          })
+          history.push("/login")
+        }
+      } else {
+        notification.error({
+          message: '网络请求异常',
+          description: '请稍后再试',
+        })
+      }
+    })
+
+  return axiosPromise
+}

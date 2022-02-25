@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-08 16:37:17
- * @LastEditTime: 2022-02-24 16:01:44
+ * @LastEditTime: 2022-02-24 16:22:53
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog_backStageSystem\blog_front\src\Pages\Login\index.js
@@ -13,9 +13,10 @@ import request from '../../api/index'
 
 // import { withRouter } from 'react-router-dom'
 import { useState } from 'react'
-const Login = () => {
+const Login = (props) => {
   const [buttonStatus, setButtonStatus] = useState(true)
-
+  const {history} = props;
+   console.log(props);
   // 登录注册
   const onFinish = (values) => {
     buttonStatus ? handleLogin(values) : handleResgiter(values)
@@ -35,7 +36,7 @@ const Login = () => {
           message: '登录成功',
         })
         localStorage.setItem('token', res.token)
-        // history.push('/')
+        history.push('/')
       }
     })
   }
@@ -54,7 +55,7 @@ const Login = () => {
           message: '登录成功',
         })
         localStorage.setItem('token', res.token)
-        // history.push('/')
+        history.push('/')
       }
     })
   }

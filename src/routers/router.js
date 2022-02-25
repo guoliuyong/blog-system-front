@@ -1,12 +1,14 @@
+
+   
 /*
  * @Author: your name
  * @Date: 2022-02-07 16:20:19
- * @LastEditTime: 2022-02-21 15:41:24
+ * @LastEditTime: 2022-02-24 16:25:44
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog_backStageSystem\blog_front\src\routers\router.js
  */
-import Home from '../Pages/index'
+import ArticleList from '../Pages/Article/ArticleList'
 import UserList from '../Pages/User'
 export const routerConfig = [
   // 文章管理
@@ -18,7 +20,7 @@ export const routerConfig = [
       {
         path: '/article/list',
         name: '文章列表',
-        component: Home,
+        component: ArticleList,
       },
     ],
   },
