@@ -1,11 +1,11 @@
-// import { createBrowserHistory } from 'history';
+import { createBrowserHistory } from 'history'
 import { notification } from 'antd'
 import axios from 'axios'
-import { useHistory } from 'react-router-dom';
-// const history = createBrowserHistory();
+// import { useHistory } from 'react-router-dom';
+const history = createBrowserHistory()
 
 export default function request(options) {
-    const history = useHistory();
+  // const history = useHistory();
   function checkStatus(response) {
     if (response.status >= 200 && response.status < 300) {
       return response
@@ -56,7 +56,9 @@ export default function request(options) {
           notification.error({
             message: 'token已过期或失效,请重新登录',
           })
-          history.push("/login")
+          setTimeout(() => {
+            window.reactRouter.push('/login')
+          }, 1000)
         }
       } else {
         notification.error({
