@@ -3,13 +3,14 @@
 /*
  * @Author: your name
  * @Date: 2022-02-07 16:20:19
- * @LastEditTime: 2022-02-24 16:25:44
+ * @LastEditTime: 2022-02-28 11:17:42
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog_backStageSystem\blog_front\src\routers\router.js
  */
 import ArticleList from '../Pages/Article/ArticleList'
 import UserList from '../Pages/User'
+import UserInfo from '../Pages/User/UserInfo'
 export const routerConfig = [
   // 文章管理
   {
@@ -33,6 +34,11 @@ export const routerConfig = [
         path: '/user/list',
         name: '用户列表',
         component: UserList,
+      },
+      {
+        path: '/user/userinfo',
+        name: '个人中心',
+        component: UserInfo,
       },
     ],
   },

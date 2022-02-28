@@ -1,18 +1,27 @@
 import { Menu } from 'antd'
 import { Link } from 'react-router-dom'
-import { routerConfig } from '../routers/router'
+import { routerConfig } from '../routers/router';
+import { openTab } from '../util/menTab';
 const { SubMenu } = Menu
 
 const CoustomMenu = () => {
   const renderSumMenu = () => {
-    return routerConfig.map(d=>{
+    return routerConfig.map((d) => {
       return (
         <SubMenu key={d.key} title={d.name}>
-          {d.routes.map((item,index)=>{
+          {d.routes.map((item, index) => {
             return (
-              <Menu.Item key={index}>
-              <Link to={item.path}>{item.name}</Link>
-            </Menu.Item>
+              <Menu.Item
+                key={item.path}
+                onClick={() => {
+                  openTab({
+                    ...item,
+                    key: item.path
+                  })
+                }}
+              >
+                <Link to={item.path}>{item.name}</Link>
+              </Menu.Item>
             )
           })}
         </SubMenu>
@@ -23,8 +32,6 @@ const CoustomMenu = () => {
     <Menu
       mode="inline"
       theme="dark"
-      //   openKeys={openKeys}
-      //   onOpenChange={onOpenChange}
       style={{ marginTop: 10, width: '100%' }}
     >
       {renderSumMenu()}

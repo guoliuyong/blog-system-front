@@ -65,6 +65,9 @@ export default function request(options) {
           message: '网络请求异常',
           description: '请稍后再试',
         })
+        setTimeout(() => {
+          window.reactRouter.push('/500')
+        }, 1000)
       }
     })
 
