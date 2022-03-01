@@ -1,7 +1,7 @@
 /*
  * @Author: liuyong.guo
  * @Date: 2022-02-28 16:37:27
- * @LastEditTime: 2022-02-28 19:55:56
+ * @LastEditTime: 2022-03-01 16:35:26
  * @LastEditors: LAPTOP-L472H14P
  * @Description: 菜单栏相关操作
  * @FilePath: \blog-system-front\src\util\menTab.js
@@ -86,3 +86,10 @@ export function removeTab(key){
         })
     }
 }
+export function  sessionTabs(){
+  const tabs = getTabData();
+  sessionStorage.setItem("activeTabs", JSON.stringify(tabs));
+}
+// export function tabListen(pathname) {
+//   const tabs = getTabData();
+// }

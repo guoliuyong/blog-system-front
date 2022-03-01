@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-07 17:22:10
- * @LastEditTime: 2022-02-28 20:23:47
+ * @LastEditTime: 2022-03-01 20:22:13
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog_backStageSystem\blog_front\src\Containers\index.js
@@ -37,23 +37,14 @@ const mapDispatch = (dispatch) => {
 }
 
 class DefaultLayout extends Component {
-  componentDidMount() {
-    console.log("222222");
-    // 给当前路由加入监听事件
-     this.props.history.listen(location => {
-       console.log(location);
-       // 判断当前路由地址 和 发生变化后的 路由地址 是否一致
-    //    if(this.props.location.pathname!==location.pathname){
-    //      // 不一致的请情况下可以触发函数进行处理
-    //      // this.function()
-    //  }
-     })
-   }
- 
+ componentDidMount(){
+   this.props.history.listen(()=>{
+     console.log("加载");
+   })
+ }
   render() {
     const token = localStorage.getItem('token')
-    const { tabs, activeKey, updateKey } = this.props
-    console.log(activeKey)
+    const { tabs, activeKey, updateKey } = this.props;
     return (
       <Layout style={{ height: '100%' }}>
         <AppAside />
@@ -77,9 +68,7 @@ class DefaultLayout extends Component {
                     tab={d.title}
                     key={d.path}
                     closable={d.key === '/index' ? false : true}
-                  >
-                    Content of Tab Pane 1
-                  </TabPane>
+                  ></TabPane>
                 )
               })}
             </Tabs>
@@ -112,4 +101,4 @@ class DefaultLayout extends Component {
     )
   }
 }
-export default withRouter(connect(mapState, mapDispatch)(DefaultLayout))
+export default connect(mapState, mapDispatch)(DefaultLayout)
