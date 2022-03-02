@@ -1,26 +1,28 @@
 /*
  * @Author: your name
  * @Date: 2022-02-08 16:37:17
- * @LastEditTime: 2022-02-24 16:22:53
+ * @LastEditTime: 2022-03-02 16:55:15
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog_backStageSystem\blog_front\src\Pages\Login\index.js
  */
 import { Layout, Divider, Form, Input, Button, notification } from 'antd'
-import  './index.less'
+import './index.less'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import request from '../../api/index'
+import { useDispatch } from 'react-redux'
 
 // import { withRouter } from 'react-router-dom'
 import { useState } from 'react'
 const Login = (props) => {
   const [buttonStatus, setButtonStatus] = useState(true)
-  const {history} = props;
-   console.log(props);
+  const { history } = props
+  const dispatch = useDispatch()
   // 登录注册
   const onFinish = (values) => {
     buttonStatus ? handleLogin(values) : handleResgiter(values)
   }
+  // 登录
   const handleLogin = (value) => {
     request({
       method: 'GET',
@@ -35,11 +37,18 @@ const Login = (props) => {
         notification.open({
           message: '登录成功',
         })
-        localStorage.setItem('token', res.token)
-        history.push('/')
+        localStorage.setItem('token', res.token);
+        dispatch({
+          type: 'UPDATE_USER',
+          payload: res,
+        })
+        // handleUserInfo(res).then(()=>{
+          history.push('/')
+        // })
       }
     })
   }
+  // 注册
   const handleResgiter = (value) => {
     request({
       method: 'POST',
@@ -55,8 +64,21 @@ const Login = (props) => {
           message: '登录成功',
         })
         localStorage.setItem('token', res.token)
-        history.push('/')
       }
+    })
+  }
+  const handleUserInfo = (res) => {
+    return request({
+      url: '/v1/self',
+      params: {
+        username: res.username,
+      },
+    }).then((reuslt) => {
+      console.log(reuslt)
+      dispatch({
+        type: 'UPDATE_USER',
+        payload: reuslt,
+      })
     })
   }
   return (

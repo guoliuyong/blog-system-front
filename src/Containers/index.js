@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-07 17:22:10
- * @LastEditTime: 2022-03-01 20:22:13
+ * @LastEditTime: 2022-03-02 15:45:18
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog_backStageSystem\blog_front\src\Containers\index.js
@@ -44,7 +44,7 @@ class DefaultLayout extends Component {
  }
   render() {
     const token = localStorage.getItem('token')
-    const { tabs, activeKey, updateKey } = this.props;
+    const { tabs, activeKey, updateKey, history } = this.props;
     return (
       <Layout style={{ height: '100%' }}>
         <AppAside />
@@ -57,6 +57,7 @@ class DefaultLayout extends Component {
               hideAdd
               onChange={(key) => {
                 updateKey(key)
+                history.push(key)
               }}
               onEdit={(key) => {
                 removeTab(key)

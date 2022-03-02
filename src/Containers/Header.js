@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Menu, Dropdown, Layout, Avatar, Badge } from 'antd'
 import request from '../api'
 import { useSelector, useDispatch } from 'react-redux'
-
+import { openTab } from '../util/menTab'
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -16,12 +16,13 @@ const { Header } = Layout
 const AppHeader = (props) => {
   const { menuToggle, loginOut, history } = props
   const user = useSelector((state) => state.user)
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  console.log(user);
   useEffect(() => {
     request({
       url: '/v1/self',
       params: {
-        username: 'wangwu',
+        username: user.username,
       },
     }).then((res) => {
       dispatch({
@@ -36,23 +37,28 @@ const AppHeader = (props) => {
    * @return {*}
    */ 
   const intoUserInfo = () =>{
-    history.push("/user/userinfo")
+    history.push('/user/userinfo')
+    openTab({
+      key: "/user/userinfo",
+      path: "/user/userinfo",
+      name: "个人中心"
+    })
   }
   const menu = (
     <Menu>
       <Menu.ItemGroup title="用户设置">
         <Menu.Divider />
-        <Menu.Item className="item">
+        <Menu.Item className="item" key="userinfo">
           <EditOutlined />
           <span style={{ marginLeft: "10px"}} onClick={()=>intoUserInfo()}>个人设置</span>
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item key="system">
           <ToolOutlined />
           <span style={{ marginLeft: "10px"}}>系统设置</span>
         </Menu.Item>
       </Menu.ItemGroup>
       <Menu.Divider />
-      <Menu.Item>
+      <Menu.Item key="loout">
         <LogoutOutlined />
         <span onClick={loginOut} style={{ marginLeft: "10px"}}>退出登录</span>
       </Menu.Item>

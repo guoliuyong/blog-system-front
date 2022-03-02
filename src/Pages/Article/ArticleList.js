@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-22 16:30:24
- * @LastEditTime: 2022-02-25 16:43:10
+ * @LastEditTime: 2022-03-02 17:52:59
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog_system\src\Pages\Article\ArticleList.js
@@ -14,8 +14,7 @@ import { connect } from 'react-redux'
 import request from '../../api/index'
 import store from '../../Store'
 const ArticleList = (props) => {
-  const value = useSelector(state => state.counter.count)
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   useEffect(() => {})
 
   return (
@@ -28,18 +27,8 @@ const ArticleList = (props) => {
       }}
     >
       文章首页
-      <Button
-        onClick={() => {
-          dispatch({
-            type: 'COUNT_ADD',
-            payload: {data: 2},
-          })
-          // props.countAdd(2)
-        }}
-      >
-        跳转
-      </Button>
-      {value}
+      <Button>跳转</Button>
+      111
     </div>
   )
 }
@@ -51,9 +40,9 @@ const mapAction = (dispatch) => {
     countAdd: (data) => {
       dispatch({
         type: 'COUNT_ADD',
-        payload: {data},
+        payload: { data },
       })
     },
   }
 }
-export default connect(mapState,mapAction)(ArticleList)
+export default connect(mapState, mapAction)(ArticleList)
