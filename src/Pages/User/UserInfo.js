@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-28 11:17:12
- * @LastEditTime: 2022-03-02 16:31:11
+ * @LastEditTime: 2022-03-03 19:15:10
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog-system-front\src\Pages\User\UserInfo.js
@@ -20,6 +20,7 @@ import {
   AutoComplete,
 } from 'antd'
 import { useSelector } from 'react-redux'
+import request from '../../api'
 
 export default function UserInfo(props) {
   const formItemLayout = {
@@ -40,9 +41,7 @@ export default function UserInfo(props) {
       },
     },
   }
-  const onFinish = (fieldsValue) => {
-    console.log(fieldsValue)
-  }
+
   const [form] = Form.useForm()
   const user = useSelector((state) => state.user)
   form.setFieldsValue({
@@ -52,27 +51,34 @@ export default function UserInfo(props) {
     sex: user.sex,
     email: user.email,
     area: user.area,
+    telphone: user.telphone
   })
-  console.log(props)
+  const onFinish = (fieldsValue) => {
+    const data = {
+      ...fieldsValue,
+      userId: user.userId,
+    }
+    console.log(data);
+    request({
+      method: 'POST',
+      url: 'v1/update/userlist',
+      data,
+    })
+  }
   return (
     <Form
       {...formItemLayout}
-      // initialValues={{
-      //   // username: user.username,
-      //   nickname: user.nickname,
-      //   realname: user.realname,
-      //   sex: user.sex,
-      //   email: user.email,
-      //   area: user.area,
-      // }}
       form={form}
       onFinish={onFinish}
       style={{
         margin: '0 auto',
       }}
     >
-      <Form.Item name="username" label="用户名" >
+      <Form.Item name="username" label="用户名">
         <Input disabled />
+      </Form.Item>
+      <Form.Item name="telphone" label="电话号码">
+        <Input />
       </Form.Item>
       <Form.Item name="nickname" label="昵称">
         <Input />

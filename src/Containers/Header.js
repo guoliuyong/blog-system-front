@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Menu, Dropdown, Layout, Avatar, Badge } from 'antd'
+import { Menu, Dropdown, Layout, Avatar } from 'antd'
 import request from '../api'
 import { useSelector, useDispatch } from 'react-redux'
 import { openTab } from '../util/menTab'
@@ -12,55 +12,72 @@ import {
   LogoutOutlined,
   EditOutlined,
 } from '@ant-design/icons'
+import storageSession from 'redux-persist/lib/storage/session'
+import store from '../Store'
 const { Header } = Layout
 const AppHeader = (props) => {
-  const { menuToggle, loginOut, history } = props
+  const { menuToggle, history } = props
   const user = useSelector((state) => state.user)
-  const dispatch = useDispatch();
-  console.log(user);
+  const dispatch = useDispatch()
   useEffect(() => {
     request({
       url: '/v1/self',
-      params: {
-        username: user.username,
-      },
     }).then((res) => {
       dispatch({
         type: 'UPDATE_USER',
         payload: res,
       })
     })
-  }, []);
+  }, [])
   /**
    * @description: 跳转个人中心
    * @param {*}
    * @return {*}
-   */ 
-  const intoUserInfo = () =>{
+   */
+
+  const intoUserInfo = () => {
     history.push('/user/userinfo')
     openTab({
-      key: "/user/userinfo",
-      path: "/user/userinfo",
-      name: "个人中心"
+      key: '/user/userinfo',
+      path: '/user/userinfo',
+      name: '个人中心',
     })
   }
+  /**
+   * @description: 退出登录
+   * @param {*}
+   * @return {*}
+   */
+
+  const loginOut = () => {
+    localStorage.removeItem('token')
+    // sessionStorage.clear();
+    store.dispatch({ type: 'LOGIN_OUT' })
+    storageSession.removeItem('persist:root')
+    history.push('/login')
+  }
+
   const menu = (
     <Menu>
       <Menu.ItemGroup title="用户设置">
         <Menu.Divider />
         <Menu.Item className="item" key="userinfo">
           <EditOutlined />
-          <span style={{ marginLeft: "10px"}} onClick={()=>intoUserInfo()}>个人设置</span>
+          <span style={{ marginLeft: '10px' }} onClick={() => intoUserInfo()}>
+            个人设置
+          </span>
         </Menu.Item>
         <Menu.Item key="system">
           <ToolOutlined />
-          <span style={{ marginLeft: "10px"}}>系统设置</span>
+          <span style={{ marginLeft: '10px' }}>系统设置</span>
         </Menu.Item>
       </Menu.ItemGroup>
       <Menu.Divider />
       <Menu.Item key="loout">
         <LogoutOutlined />
-        <span onClick={loginOut} style={{ marginLeft: "10px"}}>退出登录</span>
+        <span onClick={loginOut} style={{ marginLeft: '10px' }}>
+          退出登录
+        </span>
       </Menu.Item>
     </Menu>
   )

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-24 19:20:55
- * @LastEditTime: 2022-03-02 17:50:28
+ * @LastEditTime: 2022-03-03 14:23:32
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog-system-front\src\Store\index.js
@@ -27,9 +27,5 @@ const store = createStore(
   myPersistReducer,
   compose(window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 )
-// store.subscribe((e) => {
-//   // this.setState(store.getState());
-//   console.log(e);
-// });
 export const persistor = persistStore(store)
 export default store

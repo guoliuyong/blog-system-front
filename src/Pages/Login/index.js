@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-08 16:37:17
- * @LastEditTime: 2022-03-02 16:55:15
+ * @LastEditTime: 2022-03-03 11:50:35
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog_backStageSystem\blog_front\src\Pages\Login\index.js
@@ -42,9 +42,7 @@ const Login = (props) => {
           type: 'UPDATE_USER',
           payload: res,
         })
-        // handleUserInfo(res).then(()=>{
           history.push('/')
-        // })
       }
     })
   }
@@ -65,20 +63,6 @@ const Login = (props) => {
         })
         localStorage.setItem('token', res.token)
       }
-    })
-  }
-  const handleUserInfo = (res) => {
-    return request({
-      url: '/v1/self',
-      params: {
-        username: res.username,
-      },
-    }).then((reuslt) => {
-      console.log(reuslt)
-      dispatch({
-        type: 'UPDATE_USER',
-        payload: reuslt,
-      })
     })
   }
   return (
