@@ -1,11 +1,4 @@
-/*
- * @Author: your name
- * @Date: 2022-02-18 14:10:11
- * @LastEditTime: 2022-03-03 20:03:50
- * @LastEditors: LAPTOP-L472H14P
- * @Description: In User Settings Edit
- * @FilePath: \blog_backStageSystem\blog_front\src\Pages\User\index.js
- */
+
 import { useEffect, useState } from 'react'
 import request from '../../api'
 import { Button, Table } from 'antd'
@@ -13,7 +6,7 @@ import ContentHeader from '../../Containers/ContentHeader';
 import Main from '../../Containers/main'
 const UserList = () => {
   const [total, setTotal] = useState(0)
-
+  console.log("重新渲染");
   const [pageSize, setPageSie] = useState(1)
   const [pageNum, setpageNum] = useState(10)
   const [data, setData] = useState([])

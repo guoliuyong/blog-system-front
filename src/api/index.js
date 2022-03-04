@@ -60,14 +60,14 @@ export default function request(options) {
             window.reactRouter.push('/login')
           }, 1000)
         }
+        if (e.response.status === 500) {
+          window.reactRouter.push('/500')
+        }
       } else {
         notification.error({
           message: '网络请求异常',
           description: '请稍后再试',
         })
-        setTimeout(() => {
-          window.reactRouter.push('/500')
-        }, 1000)
       }
     })
 

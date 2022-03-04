@@ -1,7 +1,7 @@
 /*
  * @Author: liuyong.guo
  * @Date: 2022-02-28 16:37:27
- * @LastEditTime: 2022-03-01 16:35:26
+ * @LastEditTime: 2022-03-04 15:59:35
  * @LastEditors: LAPTOP-L472H14P
  * @Description: 菜单栏相关操作
  * @FilePath: \blog-system-front\src\util\menTab.js
@@ -42,7 +42,7 @@ export function replaceTab(tab) {
   store.dispatch({
     type: 'UPDATE_ACTIVE',
     payload: {
-        activeKey:tab.key,
+      activeKey: tab.key,
     },
   })
 }
@@ -65,31 +65,39 @@ export function openTab(newTab) {
         title: name,
       },
     })
-  } else{
+  } else {
     replaceTab(newTab)
     return false
   }
 }
-export function removeTab(key){
-    console.log("删除", key);
-    const tabs = getTabData();
-    const store = window.reduxApp
-    const index = tabs.findIndex(item=>item.key === key);
-    if (index !== -1) {
-        tabs.splice(index, 1);
-        store.dispatch({
-            type: "UPDATE_ACTIVE",
-            payload: {
-                activeKey: tabs[index-1].key,
-                tabs,
-            }
-        })
-    }
+export function removeTab(key) {
+  console.log('删除', key)
+  const tabs = getTabData()
+  const store = window.reduxApp
+  const index = tabs.findIndex((item) => item.key === key)
+  if (index !== -1) {
+    tabs.splice(index, 1)
+    store.dispatch({
+      type: 'UPDATE_ACTIVE',
+      payload: {
+        activeKey: tabs[index - 1].key,
+        tabs,
+      },
+    })
+  }
 }
-export function  sessionTabs(){
-  const tabs = getTabData();
-  sessionStorage.setItem("activeTabs", JSON.stringify(tabs));
+export function sessionTabs() {
+  const tabs = getTabData()
+  sessionStorage.setItem('activeTabs', JSON.stringify(tabs))
 }
-// export function tabListen(pathname) {
-//   const tabs = getTabData();
-// }
+export function removeAllTab() {
+  const store = window.reduxApp
+  const tabs = getTabData()
+  return store.dispatch({
+    type: 'UPDATE_ACTIVE',
+    payload: {
+      activeKey: '/index',
+      tabs: [tabs[0]],
+    },
+  })
+}
