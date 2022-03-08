@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-28 11:17:12
- * @LastEditTime: 2022-03-04 15:37:35
+ * @LastEditTime: 2022-03-07 22:30:08
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog-system-front\src\Pages\User\UserInfo.js
@@ -14,15 +14,18 @@ import {
   Cascader,
   Select,
   Row,
-  Col,
+  message,
   Checkbox,
   Button,
-  AutoComplete,
+  Upload,
+  notification,
 } from 'antd'
 import { useSelector } from 'react-redux'
 import request from '../../api'
 import ContentHeader from '../../Containers/ContentHeader'
-import Main from '../../Containers/main'
+import Main from '../../Containers/main';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+
 export default function UserInfo(props) {
   const formItemLayout = {
     labelCol: {
@@ -53,24 +56,51 @@ export default function UserInfo(props) {
     email: user.email,
     area: user.area,
     telphone: user.telphone,
+    picUrl: user.picUrl
   })
   const onFinish = (fieldsValue) => {
     const data = {
       ...fieldsValue,
       userId: user.userId,
     }
-    console.log(data)
     request({
       method: 'POST',
       url: 'v1/update/userlist',
       data,
+    }).then((res) => {
+      if (res) {
+        notification.success({
+          message: '修改成功',
+        })
+      }
     })
+  }
+  function beforeUpload(file) {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+    if (!isJpgOrPng) {
+      message.error('You can only upload JPG/PNG file!')
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2
+    if (!isLt2M) {
+      message.error('Image must smaller than 2MB!')
+    }
+    return isJpgOrPng && isLt2M
+  }
+  const handleFileChange = (file) => {
+    console.log(file);
+    const {response, status} = file.file;
+    if (status === "done") {
+       notification.success({
+         message: response.data,
+       })
+    }
   }
   const buttonItemLayout = { wrapperCol: { span: 14, offset: 4 } }
   return (
     <>
       <ContentHeader title="个人中心"></ContentHeader>
       <Main>
+       
         <Form
           {...formItemLayout}
           form={form}
@@ -79,6 +109,30 @@ export default function UserInfo(props) {
             margin: '0 auto',
           }}
         >
+           <Form.Item name="picUrl" label="头像">
+          <Upload
+            name="avatar"
+            listType="picture-card"
+            className="avatar-uploader"
+            showUploadList={false}
+            action="http://127.0.0.1:5000/v1/uploadHead"
+            beforeUpload={beforeUpload}
+            headers={{
+              Authorization: `bearer ${localStorage.getItem('token')}`,
+            }}
+            onChange={handleFileChange}
+            data={{ userId: user.userId }}
+          >
+            {user.picUrl ? (
+              <img src="https://duanvideo.oss-cn-beijing.aliyuncs.com/test/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20220307222557.jpg" alt="avatar" style={{ width: '100%' }} />
+            ) : (
+              <div>
+                {<PlusOutlined />}
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </div>
+            )}
+          </Upload>
+        </Form.Item>
           <Form.Item name="username" label="用户名">
             <Input disabled />
           </Form.Item>

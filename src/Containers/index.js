@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-07 17:22:10
- * @LastEditTime: 2022-03-04 17:26:17
+ * @LastEditTime: 2022-03-07 22:44:43
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog_backStageSystem\blog_front\src\Containers\index.js
@@ -47,7 +47,7 @@ class DefaultLayout extends Component {
     console.log(d)
     const menu = (
       <Menu>
-        <Menu.Item key="1" onClick={() => Windows.location.reload()}>
+        <Menu.Item key="1">
           刷新
         </Menu.Item>
         <Menu.Item
