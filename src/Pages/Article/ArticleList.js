@@ -1,35 +1,76 @@
 /*
  * @Author: your name
  * @Date: 2022-02-22 16:30:24
- * @LastEditTime: 2022-03-02 17:52:59
+ * @LastEditTime: 2022-03-10 20:51:13
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog_system\src\Pages\Article\ArticleList.js
  */
 
-import { Button } from 'antd'
-import React, { useEffect } from 'react'
+import { Button, Table } from 'antd'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { connect } from 'react-redux'
 import request from '../../api/index'
 import store from '../../Store'
+import ContentHeader from '../../Containers/ContentHeader'
+import SearchList from './SearchList'
+import Main from '../../Containers/main';
+import moment from 'moment'
+
 const ArticleList = (props) => {
   const dispatch = useDispatch()
-  useEffect(() => {})
+  const [dataSoure, setDataSource] = useState([])
+  useEffect(() => {
+    initData()
+  }, [])
 
+  const initData = (data) => {
+    request({
+      url: 'v1/article/list',
+      method: 'GET',
+      params: data,
+    }).then((res) => {
+      const { content } = res
+      setDataSource(content)
+    })
+  }
+  const columns = [
+    {
+      title: '序号',
+      dataIndex: 'userId',
+      key: 'userId',
+      render: (text, record, index) => {
+        return <span>{index + 1}</span>
+      },
+    },
+    {
+      title: '文章名称',
+      dataIndex: 'articleName',
+      key: 'articleName',
+    },
+    {
+      title: '文章分类',
+      dataIndex: 'category',
+      key: 'category',
+    },
+    {
+      title: '创建日期',
+      dataIndex: 'creationDate',
+      key: 'creationDate',
+      render: (value) =>{
+        return <span>{moment(value).format("YYYY-MM-DD")}</span>
+      }
+    },
+  ]
   return (
-    <div
-      onClick={() => {
-        request({
-          url: 'v1/article/list',
-          method: 'GET',
-        })
-      }}
-    >
-      文章首页
-      <Button>跳转</Button>
-      111
-    </div>
+    <>
+      <ContentHeader title="文章列表管理"></ContentHeader>
+      <Main>
+        <SearchList initData={initData} />
+        <Table dataSource={dataSoure} columns={columns}></Table>
+      </Main>
+    </>
   )
 }
 const mapState = (state) => {

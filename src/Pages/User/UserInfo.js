@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-28 11:17:12
- * @LastEditTime: 2022-03-07 22:30:08
+ * @LastEditTime: 2022-03-10 20:11:41
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog-system-front\src\Pages\User\UserInfo.js
@@ -124,7 +124,7 @@ export default function UserInfo(props) {
             data={{ userId: user.userId }}
           >
             {user.picUrl ? (
-              <img src="https://duanvideo.oss-cn-beijing.aliyuncs.com/test/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20220307222557.jpg" alt="avatar" style={{ width: '100%' }} />
+              <img src={user.picUrl} alt="avatar" style={{ width: '100%' }} />
             ) : (
               <div>
                 {<PlusOutlined />}
