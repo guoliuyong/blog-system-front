@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-22 16:30:24
- * @LastEditTime: 2022-03-10 20:51:13
+ * @LastEditTime: 2022-03-14 20:19:58
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog_system\src\Pages\Article\ArticleList.js
@@ -15,7 +15,7 @@ import request from '../../api/index'
 import store from '../../Store'
 import ContentHeader from '../../Containers/ContentHeader'
 import SearchList from './SearchList'
-import Main from '../../Containers/main';
+import Main from '../../Containers/main'
 import moment from 'moment'
 
 const ArticleList = (props) => {
@@ -58,14 +58,16 @@ const ArticleList = (props) => {
       title: '创建日期',
       dataIndex: 'creationDate',
       key: 'creationDate',
-      render: (value) =>{
-        return <span>{moment(value).format("YYYY-MM-DD")}</span>
-      }
+      render: (value) => {
+        return <span>{moment(value).format('YYYY-MM-DD')}</span>
+      },
     },
   ]
   return (
     <>
-      <ContentHeader title="文章列表管理"></ContentHeader>
+      <ContentHeader title="文章列表管理">
+        <Button>写文章</Button>
+      </ContentHeader>
       <Main>
         <SearchList initData={initData} />
         <Table dataSource={dataSoure} columns={columns}></Table>

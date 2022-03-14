@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-10 20:34:43
- * @LastEditTime: 2022-03-10 20:50:53
+ * @LastEditTime: 2022-03-14 17:01:53
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog-system-front\src\Pages\Article\SearchList.js
@@ -9,11 +9,12 @@
 import React, { useState } from 'react'
 import { DownOutlined, UpOutlined } from '@ant-design/icons'
 import { Form, Row, Col, Input, Button, Select, DatePicker } from 'antd'
+import moment from 'moment'
 const { Option } = Select
 export default function SearchList(props) {
   const [form] = Form.useForm()
-  const [expand, setExpand] = useState(false);
-  const {initData} = props;
+  const [expand, setExpand] = useState(false)
+  const { initData } = props
   const getFields = () => {
     const count = expand ? 10 : 6
     const children = [
@@ -36,7 +37,12 @@ export default function SearchList(props) {
     return children
   }
   const onFinish = (values) => {
-    initData(values);
+    console.log(values);
+    const params = {
+      ...values,
+      creationDate: values.creationDate ? moment(values.creationDate).format('YYYY-MM-DD') : null,
+    }
+    initData(params)
   }
 
   return (
