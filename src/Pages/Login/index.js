@@ -1,9 +1,9 @@
 /*
  * @Author: your name
  * @Date: 2022-02-08 16:37:17
- * @LastEditTime: 2022-03-03 11:50:35
+ * @LastEditTime: 2022-03-14 15:34:33
  * @LastEditors: LAPTOP-L472H14P
- * @Description: In User Settings Edit
+ * @Description: 登录注册界面
  * @FilePath: \blog_backStageSystem\blog_front\src\Pages\Login\index.js
  */
 import { Layout, Divider, Form, Input, Button, notification } from 'antd'
@@ -11,24 +11,23 @@ import './index.less'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import request from '../../api/index'
 import { useDispatch } from 'react-redux'
-
+import { login } from '../../Services/global/global'
 // import { withRouter } from 'react-router-dom'
 import { useState } from 'react'
 const Login = (props) => {
-  const [buttonStatus, setButtonStatus] = useState(true)
+  const [buttonStatus, setButtonStatus] = useState(true) // 登录注册状态切换
+  const [loading, setLoading] = useState(false) // 按钮loading展示
+  const [form] = Form.useForm();
   const { history } = props
-  const dispatch = useDispatch()
   // 登录注册
   const onFinish = (values) => {
     buttonStatus ? handleLogin(values) : handleResgiter(values)
   }
   // 登录
   const handleLogin = (value) => {
-    request({
-      method: 'GET',
-      url: '/api/login',
-      params: value,
-    }).then((res) => {
+    setLoading(true)
+    login(value).then((res) => {
+      setLoading(false)
       if (res.failed) {
         notification.open({
           message: res.message,
@@ -37,12 +36,8 @@ const Login = (props) => {
         notification.open({
           message: '登录成功',
         })
-        localStorage.setItem('token', res.token);
-        dispatch({
-          type: 'UPDATE_USER',
-          payload: res,
-        })
-          history.push('/')
+        localStorage.setItem('token', res.token)
+        history.push('/')
       }
     })
   }
@@ -62,8 +57,14 @@ const Login = (props) => {
           message: '登录成功',
         })
         localStorage.setItem('token', res.token)
+        history.push('/')
       }
     })
+  }
+  const handleStatus = () => {
+    setButtonStatus(!buttonStatus);
+    form.resetFields();
+    
   }
   return (
     <Layout className="login animated fadeIn">
@@ -73,9 +74,9 @@ const Login = (props) => {
           <Divider />
           <Form
             name="normal_login"
-            // className="login-form"
             initialValues={{ remember: true }}
             onFinish={onFinish}
+            form={form}
           >
             <Form.Item
               name="username"
@@ -101,8 +102,8 @@ const Login = (props) => {
               />
             </Form.Item>
             <Form.Item style={{ display: 'flex', justifyContent: 'right' }}>
-              <Button type="link" onClick={() => setButtonStatus(false)}>
-                还没账号?去注册
+              <Button type="link" onClick={() => handleStatus()}>
+                {buttonStatus ? ' 还没账号?去注册' : '返回登录'}
               </Button>
             </Form.Item>
             <Form.Item>
@@ -110,6 +111,7 @@ const Login = (props) => {
                 type="primary"
                 htmlType="submit"
                 className="login-form-button"
+                loading={loading}
               >
                 {buttonStatus ? '登录' : '注册'}
               </Button>

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-07 17:22:10
- * @LastEditTime: 2022-03-07 22:44:43
+ * @LastEditTime: 2022-03-14 14:18:02
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog_backStageSystem\blog_front\src\Containers\index.js
@@ -16,8 +16,7 @@ import './index.less'
 import { routerConfig } from '../routers/router'
 import HeaderJS from './Header'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
-import Main from './main'
+import routes from '../routers'
 const { Content, Header } = Layout
 const { TabPane } = Tabs
 const mapState = ({ global }) => {
@@ -44,7 +43,6 @@ class DefaultLayout extends Component {
   }
 
   renderContextMenu(d) {
-    console.log(d)
     const menu = (
       <Menu>
         <Menu.Item key="1">
@@ -127,7 +125,7 @@ class DefaultLayout extends Component {
             </Tabs>
             <Switch>
               {token ? (
-                routerConfig.map((d) => {
+                routes.map((d) => {
                   return d.routes ? (
                     d.routes.map((item) => (
                       <Route

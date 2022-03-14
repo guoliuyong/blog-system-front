@@ -1,7 +1,7 @@
 /*
  * @Author: liuyong.guo
  * @Date: 2022-02-28 16:37:27
- * @LastEditTime: 2022-03-04 15:59:35
+ * @LastEditTime: 2022-03-14 11:12:57
  * @LastEditors: LAPTOP-L472H14P
  * @Description: 菜单栏相关操作
  * @FilePath: \blog-system-front\src\util\menTab.js
@@ -12,8 +12,8 @@
  */
 function getTabData() {
   const state = window.reduxApp.getState()
-  const { global: { tabs = [] } = {} } = state
-  return tabs
+  const { global: { tabs = [], activeKey } = {} } = state
+  return { tabs, activeKey }
 }
 
 /**
@@ -22,7 +22,7 @@ function getTabData() {
  * @return {*}
  */
 export function findTabKey(currentTab) {
-  const tabs = getTabData()
+  const { tabs } = getTabData()
   let tab = null
   tabs.forEach((d) => {
     if (d.key === currentTab.key) {
@@ -37,14 +37,15 @@ export function findTabKey(currentTab) {
  * @param {*} tab
  * @return {*}
  */
-export function replaceTab(tab) {
+export function replaceTab(key) {
   const store = window.reduxApp
   store.dispatch({
     type: 'UPDATE_ACTIVE',
     payload: {
-      activeKey: tab.key,
+      activeKey: key,
     },
   })
+  window.reactRouter.push(key)
 }
 
 /**
@@ -66,33 +67,54 @@ export function openTab(newTab) {
       },
     })
   } else {
-    replaceTab(newTab)
+    replaceTab(key)
     return false
   }
 }
+
+/**
+ * @description: 关闭tab，主逻辑,非最后一个tab，依次向后active
+ * @param {*} key
+ * @return {*}
+ */
 export function removeTab(key) {
-  console.log('删除', key)
-  const tabs = getTabData()
+  const { tabs, activeKey } = getTabData()
+  let newTabs = []
+  const len = tabs.length - 1
   const store = window.reduxApp
-  const index = tabs.findIndex((item) => item.key === key)
-  if (index !== -1) {
-    tabs.splice(index, 1)
-    store.dispatch({
-      type: 'UPDATE_ACTIVE',
-      payload: {
-        activeKey: tabs[index - 1].key,
-        tabs,
-      },
-    })
+  let newActiveKey = ''
+  let nextActiveIndex = 0
+  tabs.forEach((item, index) => {
+    console.log(index)
+    if (item.key !== key) {
+      newTabs.push(item)
+    } else {
+      nextActiveIndex = index
+    }
+  })
+  if (activeKey === key) {
+    if (nextActiveIndex === len) {
+      newActiveKey = newTabs[newTabs.length - 1].key
+    } else {
+      newActiveKey = newTabs[nextActiveIndex].key
+    }
+    replaceTab(newActiveKey)
   }
+  store.dispatch({
+    type: 'UPDATE_ACTIVE',
+    payload: {
+      tabs: newTabs,
+    },
+  })
 }
+
 export function sessionTabs() {
-  const tabs = getTabData()
+  const { tabs } = getTabData()
   sessionStorage.setItem('activeTabs', JSON.stringify(tabs))
 }
 export function removeAllTab() {
   const store = window.reduxApp
-  const tabs = getTabData()
+  const { tabs } = getTabData()
   return store.dispatch({
     type: 'UPDATE_ACTIVE',
     payload: {

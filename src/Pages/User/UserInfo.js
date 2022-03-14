@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-28 11:17:12
- * @LastEditTime: 2022-03-10 20:11:41
+ * @LastEditTime: 2022-03-14 14:42:32
  * @LastEditors: LAPTOP-L472H14P
  * @Description: In User Settings Edit
  * @FilePath: \blog-system-front\src\Pages\User\UserInfo.js
@@ -23,10 +23,10 @@ import {
 import { useSelector } from 'react-redux'
 import request from '../../api'
 import ContentHeader from '../../Containers/ContentHeader'
-import Main from '../../Containers/main';
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-
-export default function UserInfo(props) {
+import Main from '../../Containers/main'
+import { connect } from 'react-redux'
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
+function UserInfo(props) {
   const formItemLayout = {
     labelCol: {
       xs: {
@@ -56,7 +56,7 @@ export default function UserInfo(props) {
     email: user.email,
     area: user.area,
     telphone: user.telphone,
-    picUrl: user.picUrl
+    picUrl: user.picUrl,
   })
   const onFinish = (fieldsValue) => {
     const data = {
@@ -71,6 +71,9 @@ export default function UserInfo(props) {
       if (res) {
         notification.success({
           message: '修改成功',
+        })
+        props.dispatch({
+          type: 'USER_FETCH_REQUESTED',
         })
       }
     })
@@ -87,12 +90,11 @@ export default function UserInfo(props) {
     return isJpgOrPng && isLt2M
   }
   const handleFileChange = (file) => {
-    console.log(file);
-    const {response, status} = file.file;
-    if (status === "done") {
-       notification.success({
-         message: response.data,
-       })
+    const { response, status } = file.file
+    if (status === 'done') {
+      props.dispatch({
+        type: 'USER_FETCH_REQUESTED',
+      })
     }
   }
   const buttonItemLayout = { wrapperCol: { span: 14, offset: 4 } }
@@ -100,7 +102,6 @@ export default function UserInfo(props) {
     <>
       <ContentHeader title="个人中心"></ContentHeader>
       <Main>
-       
         <Form
           {...formItemLayout}
           form={form}
@@ -109,30 +110,30 @@ export default function UserInfo(props) {
             margin: '0 auto',
           }}
         >
-           <Form.Item name="picUrl" label="头像">
-          <Upload
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-            action="http://127.0.0.1:5000/v1/uploadHead"
-            beforeUpload={beforeUpload}
-            headers={{
-              Authorization: `bearer ${localStorage.getItem('token')}`,
-            }}
-            onChange={handleFileChange}
-            data={{ userId: user.userId }}
-          >
-            {user.picUrl ? (
-              <img src={user.picUrl} alt="avatar" style={{ width: '100%' }} />
-            ) : (
-              <div>
-                {<PlusOutlined />}
-                <div style={{ marginTop: 8 }}>Upload</div>
-              </div>
-            )}
-          </Upload>
-        </Form.Item>
+          <Form.Item name="picUrl" label="头像">
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList={false}
+              action="http://127.0.0.1:5000/v1/uploadHead"
+              beforeUpload={beforeUpload}
+              headers={{
+                Authorization: `bearer ${localStorage.getItem('token')}`,
+              }}
+              onChange={handleFileChange}
+              data={{ userId: user.userId }}
+            >
+              {user.picUrl ? (
+                <img src={user.picUrl} alt="avatar" style={{ width: '100%' }} />
+              ) : (
+                <div>
+                  {<PlusOutlined />}
+                  <div style={{ marginTop: 8 }}>Upload</div>
+                </div>
+              )}
+            </Upload>
+          </Form.Item>
           <Form.Item name="username" label="用户名">
             <Input disabled />
           </Form.Item>
@@ -185,3 +186,4 @@ export default function UserInfo(props) {
     </>
   )
 }
+export default connect()(UserInfo)

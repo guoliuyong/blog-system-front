@@ -12,7 +12,7 @@ export default function request(options) {
     }
   }
   const instance = axios.create({
-    timeout: 5000,
+    timeout: 3000,
     baseURL: 'http://127.0.0.1:5000',
   })
   // 处理请求头

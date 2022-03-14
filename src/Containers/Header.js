@@ -20,13 +20,8 @@ const AppHeader = (props) => {
   const user = useSelector((state) => state.user)
   const dispatch = useDispatch();
   useEffect(() => {
-    request({
-      url: '/v1/self',
-    }).then((res) => {
-      dispatch({
-        type: 'UPDATE_USER',
-        payload: res,
-      })
+    dispatch({
+      type: 'USER_FETCH_REQUESTED',
     })
   }, [])
   /**
